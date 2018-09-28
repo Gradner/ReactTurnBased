@@ -33,15 +33,6 @@ class GameList extends Component {
     window.removeEventListener("resize", this.resizeClient);
   }
 
-  resizeClient = () => {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    this.setState({
-      windowWidth: width,
-      windowHeight: height
-    })
-  }
-
   displayGames = (games) => {
     if(games.length < 1){
       return(<div>No Games Currently Available</div>)

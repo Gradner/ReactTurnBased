@@ -4,9 +4,6 @@ class Game {
     this.roomName = options.roomName || 'Game';
     this.players = [];
     this.maxPlayers = options.maxPlayers || 2;
-    this.currentPlayer = 0;
-    this.turnTimerHasStarted = false;
-    this.turnTimeRemaining = 0;
     this.socketUrl = options.socketUrl;
     this.gameHasStarted = false;
     this.playersReady = false;
@@ -19,13 +16,12 @@ class Game {
   }
 
   addPlayer(playerID) {
-    if(this.players.length < this.maxPlayers){
+    if(this.players.length < this.maxPlayers && !this.players.includes(playerID)){
       this.players.push(playerID)
     } else {
       console.log('error: could not join game, game is full')
     }
   }
-
 }
 
 module.exports = Game;

@@ -28,22 +28,15 @@ class App extends Component {
   }
 
   state = {
-    games: [],
+    currentUser: {},
     users: [],
     activeGame: {},
-    joinedGame: false,
     gameState: 0,
   }
 
   componentWillMount = () => {
     socket.on('connect', () => {
       console.log('connected 2 socketboi')
-    })
-
-    socket.on('gameList', (games)=>{
-      this.setState({
-        games: games
-      })
     })
 
     socket.on('userList', (users)=>{
@@ -61,9 +54,11 @@ class App extends Component {
     window.removeEventListener("resize", this.resizeClient);
   }
 
-  ///////////////////////////////////////////////////////////////////
-  //  Login Screen Functions
-  ///////////////////////////////////////////////////////////////////
+  changeGameState = (requestedState) => {
+    this.setState({
+      gameState: requestedState,
+    })
+  }
 
   userLogin = (username) => {
     socket.emit('login', username)
@@ -84,10 +79,17 @@ class App extends Component {
   getScreen = (gamestate) => {
     switch(gamestate){
       case 0:
-        return (<Login socket={socket} onLogin={ this.userLogin }/>)
+        return (<Login
+          socket={socket}
+          onStateChange={ this.changeGameState }
+          onLogin={ this.userLogin }
+          />)
         break;
       case 1:
-        return (<GameList socket={socket}/>)
+        return (<GameList
+          socket={socket}
+          onStateChange={ this.changeGameState }
+          />)
         break;
     }
   }
@@ -95,6 +97,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <div style={styles.topBar}></div>
         {this.getScreen(this.state.gameState)}
       </div>
     );
@@ -102,3 +105,19 @@ class App extends Component {
 }
 
 export default App;
+
+///////////////////////////////////////////////////////////////////
+//  CSS BS
+///////////////////////////////////////////////////////////////////
+
+const styles = {
+  topBar: {
+    position: 'relative',
+    top: '0px',
+    backgroundColor: '#414141',
+    boxShadow: '0px 0px 10px',
+    height: '48px',
+    width: '100%',
+    display: 'block'
+  }
+}

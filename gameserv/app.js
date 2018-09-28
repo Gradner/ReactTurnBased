@@ -36,11 +36,12 @@ var users = [];
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var app = express();
-
 ///////////////////////////////////////////////////////////////////
 //  Engine Setup
 ///////////////////////////////////////////////////////////////////
+
+var app = express();
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -106,7 +107,7 @@ io.on('connection', function (socket) {
       socketUrl: '/game' + gameIDcount
     })
     games.push(newgame)
-    socket.emit('gameList', games);
+    io.emit('gameList', games);
   });
 
   socket.on('joinGame', (gameid)=>{
